@@ -1,1 +1,4 @@
 ctrlp_cache/
+cache_dir/undo_cache/*
+
+!cache_dir/undo_cache/README.md

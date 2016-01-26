@@ -1,26 +1,30 @@
 call plug#begin('~/.config/nvim/plugged')
 
 " Plugin tables
-Plug 'scrooloose/nerdcommenter'
-Plug 'airblade/vim-gitgutter'
-Plug 'majutsushi/tagbar'
-Plug 'jeetsukumaran/vim-buffergator'
-Plug 'bling/vim-bufferline'
-Plug 'rking/ag.vim'
-Plug 'mbbill/undotree'
-Plug 'tpope/vim-fugitive'
-Plug 'Valloric/ListToggle'
-Plug 'd0u9/cscope.vim'
-Plug 'Shougo/vinarise.vim'
+"
+	Plug 'scrooloose/nerdcommenter'
+	Plug 'airblade/vim-gitgutter'
+	Plug 'majutsushi/tagbar'
+	Plug 'jeetsukumaran/vim-buffergator'
+	Plug 'bling/vim-bufferline'
+	Plug 'rking/ag.vim'
+	Plug 'mbbill/undotree'
+	Plug 'tpope/vim-fugitive'
+	Plug 'Valloric/ListToggle'
+	Plug 'd0u9/cscope.vim'
+	Plug 'Shougo/vinarise.vim'
 
-Plug 'bling/vim-airline'
-Plug 'ctrlpvim/ctrlp.vim'
-Plug 'scrooloose/nerdtree'
-Plug 'ivalkeen/nerdtree-execute'
-Plug 'Xuyuanp/nerdtree-git-plugin'
+	Plug 'bling/vim-airline'
+	Plug 'ctrlpvim/ctrlp.vim'
+	Plug 'scrooloose/nerdtree'
+	Plug 'ivalkeen/nerdtree-execute'
+	Plug 'Xuyuanp/nerdtree-git-plugin'
+	Plug 'mattn/emmet-vim'
+	Plug 'mustache/vim-mustache-handlebars'
+	Plug 'Yggdroot/indentLine'
 
-Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer' }
-Plug 'dhruvasagar/vim-table-mode', { 'on': 'TableModeToggle' }
+	Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer' }
+	Plug 'dhruvasagar/vim-table-mode', { 'on': 'TableModeToggle' }
 
 " Add plugins to &runtimepath
 call plug#end()
@@ -65,6 +69,9 @@ call plug#end()
 	" Git spell check
 	autocmd Filetype gitcommit setlocal spell textwidth=72
 
+	
+
+
 	set backup                  " Backups are nice ...
 	if has('persistent_undo')
 		set undodir=~/.config/nvim/cache_dir/undo_cache
@@ -74,11 +81,13 @@ call plug#end()
 	endif
 
 	" http://vim.wikia.com/wiki/Remove_swap_and_backup_files_from_your_working_directory
-	set backupdir=./.backup,~/.vim/backup,/tmp
-	set directory=.,./.backup,/tmp
-
-	" set UTF-8 encoding
-	set fileencoding=utf-8
+	set backupdir=~/.config/nvim/.backup,/tmp
+	set directory=~/.config/nvim/.swp,/tmp
+	
+	" file encoding
+	set encoding=utf-8
+	set fileencodings=ucs-bom,utf-8,big5,euc-jp,gbk,euc-kr,utf-bom,iso8859-1,euc-jp,utf-16le,latin1
+	set fenc=utf-8 enc=utf-8 tenc=utf-8
 	scriptencoding utf-8
 " }
 
@@ -97,7 +106,7 @@ call plug#end()
 	set showmode                    " Display the current mode
 
 	" Highligh the column 80
-	set colorcolumn=80
+	set colorcolumn=128
 
 	" Highlight current line and column
 	set cursorline
@@ -115,7 +124,6 @@ call plug#end()
 
 		" Broken down into easily includeable segments
 		set statusline=%<%f\                     " Filename
-		set statusline+=%w%h%m%r                 " Options
 		if !exists('g:override_spf13_bundles')
 			set statusline+=%{fugitive#statusline()} " Git Hotness
 		endif
@@ -124,7 +132,15 @@ call plug#end()
 		set statusline+=%=%-14.(%l,%c%V%)\ %p%%  " Right aligned file nav info
 
 	endif
-
+	
+	set synmaxcol=128
+	set viminfo=			                    " disable .viminfo file
+	set ttyfast                           " send more chars while redrawing
+	set autoindent
+	set smartindent
+	set copyindent                        " copy the previous indentation on autoindenting
+	set smarttab                          " insert tabs on the start of a line according to
+	set expandtab                         " replace <TAB> with spaces
 	set linespace=0                 " No extra spaces between rows, only available for GUI vim
 	set number                      " Line numbers on
 	set showmatch                   " Show matching brackets/parenthesis
@@ -136,8 +152,16 @@ call plug#end()
 	set scrolljump=5                " Lines to scroll when cursor leaves screen
 	set scrolloff=3                 " Minimum lines to keep above and below cursor
 	set foldenable                  " Auto fold code
-	set list
-	set listchars=tab:›\ ,trail:•,extends:+,nbsp:. " Highlight problematic whitespace
+	set foldmethod=indent
+	"set list
+	"set listchars=tab:›\ ,trail:•,extends:+,nbsp:. " Highlight problematic whitespace
+
+	" disable sound on errors
+	set visualbell
+	set noerrorbells
+	set t_vb=
+	set tm=500
+
 " }
 
 " Formatting {
@@ -167,8 +191,13 @@ call plug#end()
 	nmap <silent> <leader>/ :set invhlsearch<CR>
 
 	" Visual shifting (does not exit Visual mode)
-	vnoremap < <gv
-	vnoremap > >gv
+	" vnoremap < <gv
+	" vnoremap > >gv
+	" identation
+	nmap <TAB> v>
+	nmap <S-TAB> v<
+	vmap <TAB> >gv
+	vmap <S-TAB> <gv
 
 	" Allow using the repeat operator with a visual selection (!)
 	" http://stackoverflow.com/a/8064607/127816
@@ -206,7 +235,10 @@ call plug#end()
 
 	" Go back to previous window
 	"map <Leader>wp <C-w>p
-
+	"
+	
+	" remap VIM 0
+	map 0 ^
 
 	" Line number toggle {
 		let g:relativemode = 0
@@ -258,36 +290,36 @@ call plug#end()
 
 " YCM {
 
-  let g:ycm_enable_diagnostic_signs = 1
-  let g:ycm_autoclose_preview_window_after_insertion = 1
-  let g:ycm_auto_trigger = 1
-  let g:ycm_global_ycm_extra_conf = '~/.config/nvim/ycm_extra_conf.py'
-  let g:ycm_extra_conf_globlist = ['~/.config/nvim/ycm_extra_conf.py']
+	let g:ycm_enable_diagnostic_signs = 1
+	let g:ycm_autoclose_preview_window_after_insertion = 1
+	let g:ycm_auto_trigger = 1
+	let g:ycm_global_ycm_extra_conf = '~/.config/nvim/ycm_extra_conf.py'
+	let g:ycm_extra_conf_globlist = ['~/.config/nvim/ycm_extra_conf.py']
 
-  nnoremap <leader>jr :YcmDiags<CR>
-  nnoremap <leader>jh :YcmCompleter GoToInclude<cr>
-  nnoremap <leader>jd :YcmCompleter GoTo<cr>
-  nnoremap <leader>jl :YcmCompleter GoToDeclaration<cr>
-  nnoremap <leader>jf :YcmCompleter GoToDefinition<cr>
-  nnoremap <leader>jx :YcmCompleter FixIt<cr>
-  nnoremap <leader>jp :YcmCompleter GetParent<cr>
-  nnoremap <leader>jt :YcmCompleter GetType<cr>
-  nnoremap <leader>jo :YcmCompleter GetDoc<cr>
+	nnoremap <leader>jr :YcmDiags<CR>
+	nnoremap <leader>jh :YcmCompleter GoToInclude<cr>
+	nnoremap <leader>jd :YcmCompleter GoTo<cr>
+	nnoremap <leader>jl :YcmCompleter GoToDeclaration<cr>
+	nnoremap <leader>jf :YcmCompleter GoToDefinition<cr>
+	nnoremap <leader>jx :YcmCompleter FixIt<cr>
+	nnoremap <leader>jp :YcmCompleter GetParent<cr>
+	nnoremap <leader>jt :YcmCompleter GetType<cr>
+	nnoremap <leader>jo :YcmCompleter GetDoc<cr>
 
-  let g:ycm_filetype_blacklist = {
-      \ 'tagbar' : 1,
-      \ 'qf' : 1,
-      \ 'notes' : 1,
-      \ 'markdown' : 1,
-      \ 'unite' : 1,
-      \ 'text' : 1,
-      \ 'vimwiki' : 1,
-      \ 'pandoc' : 1,
-      \ 'infolog' : 1,
-      \ 'mail' : 1,
-      \ 'gitcommit' : 1
-          \}
-" }
+	let g:ycm_filetype_blacklist = {
+		\ 'tagbar' : 1,
+		\ 'qf' : 1,
+		\ 'notes' : 1,
+		\ 'markdown' : 1,
+		\ 'unite' : 1,
+		\ 'text' : 1,
+		\ 'vimwiki' : 1,
+		\ 'pandoc' : 1,
+		\ 'infolog' : 1,
+		\ 'mail' : 1,
+		\ 'gitcommit' : 1
+		  \}
+	" }
 
 
 " nerdcommenter {
@@ -395,3 +427,19 @@ call plug#end()
 	let NERDTreeShowHidden = 0
 	let NERDTreeBookmarksFile = expand('$HOME') . '/.config/nvim/NERDTreeBookmarks'
 " }
+
+
+" Emmet {
+	let g:user_emmet_expandabbr_key = '<C-e>'
+" }
+"
+
+" indentLine {
+    " vim
+    let g:indentLine_color_term = 239
+    " gvim
+    let g:indentLine_color_gui = '#A4E57E'
+
+    let g:indentLine_char = '¦'
+" }
+
