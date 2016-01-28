@@ -22,9 +22,17 @@ call plug#begin('~/.config/nvim/plugged')
 	Plug 'mattn/emmet-vim'
 	Plug 'mustache/vim-mustache-handlebars'
 	Plug 'Yggdroot/indentLine'
+	Plug 'groenewege/vim-less'
+    Plug 'marijnh/tern_for_vim'
+    Plug 'pangloss/vim-javascript'
+    Plug 'elzr/vim-json'
+    Plug 'godlygeek/tabular'
+    Plug 'plasticboy/vim-markdown'
+    Plug 'tpope/vim-surround'
+    Plug 'Raimondi/delimitMate'
+    Plug 'cakebaker/scss-syntax.vim'
 
 	Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer' }
-	Plug 'dhruvasagar/vim-table-mode', { 'on': 'TableModeToggle' }
 
 " Add plugins to &runtimepath
 call plug#end()
@@ -43,14 +51,17 @@ call plug#end()
 
 " General settings {
 	set background=dark
-
-	filetype plugin indent on	" Automatically detect file types.
+    
+    
+    filetype on                           " enable filetype detection
+    filetype indent on                    " enable filetype-specific indenting
+    filetype plugin on                    " enable filetype-specific plugins
 	syntax on			" Syntax highlighting
 	set mousehide			" Hide the mouse cursor while typing
 
 
 	" Share content with the system's clipborad
-	set clipboard+=unnamedplus
+	set clipboard+=unnamed
 
 	set shortmess+=filmnrxoOtT	" Avoiding the 'Hit ENTER to continue' prompts
 	set viewoptions=folds,options,cursor,unix,slash " Better Unix / Windows compatibility
@@ -68,9 +79,6 @@ call plug#end()
 
 	" Git spell check
 	autocmd Filetype gitcommit setlocal spell textwidth=72
-
-	
-
 
 	set backup                  " Backups are nice ...
 	if has('persistent_undo')
@@ -101,7 +109,7 @@ call plug#end()
 
 	" Set the color scheme
 	set t_Co=256
-	colorscheme solarized
+    colorscheme solarized
 
 	set showmode                    " Display the current mode
 
@@ -109,8 +117,8 @@ call plug#end()
 	set colorcolumn=128
 
 	" Highlight current line and column
-	set cursorline
-	set cursorcolumn
+	"set cursorline
+	"set cursorcolumn
 
 	highlight clear SignColumn      " SignColumn should match background
 	highlight clear LineNr          " Current line number row will have same background color in relative mode
@@ -133,9 +141,11 @@ call plug#end()
 
 	endif
 	
-	set synmaxcol=128
+	set synmaxcol=1024
+	"autocmd Filetype less,css setlocal synmaxcol=128
 	set viminfo=			                    " disable .viminfo file
 	set ttyfast                           " send more chars while redrawing
+    set lazyredraw " to avoid scrolling problems
 	set autoindent
 	set smartindent
 	set copyindent                        " copy the previous indentation on autoindenting
@@ -194,7 +204,7 @@ call plug#end()
 	" vnoremap < <gv
 	" vnoremap > >gv
 	" identation
-	nmap <TAB> v>
+    nmap <TAB> v>
 	nmap <S-TAB> v<
 	vmap <TAB> >gv
 	vmap <S-TAB> <gv
@@ -267,6 +277,36 @@ call plug#end()
 
 		map <silent> <leader>tl :call NumberToggle()<CR>
 	" }
+" }
+
+" GVim setting {
+    set guioptions=ce
+    set linespace=2
+
+    if has("gui_macvim")
+        set guifont=Droid\ Sans\ Mono\ for\ Powerline:h12
+    elseif has("gui_gtk")
+        set guifont=Droid\ Sans\ Mono\ for\ Powerline 12
+    else
+        set guifont=Droid\ Sans\ Mono\ for\ Powerline:h12
+    end
+
+    if has("gui_macvim")
+        set transparency=0
+
+        " disable default menu hot key
+        macmenu &File.New\ Window key=<nop>
+        macmenu &File.Close key=<nop>
+
+        " map cmd + enter to switch to full screen
+        map <D-Enter> :set invfu<CR>
+
+        " map cmd+1~9 to switch tab 1~9
+        for i in range(1, 9)
+            exec "nnoremap <D-".i."> ".i."gt"
+        endfor
+
+    endif
 " }
 
 
@@ -418,7 +458,7 @@ call plug#end()
 " }
 
 " NERDtree {
-	map <F3> :NERDTreeToggle<cr>
+	map <F2> :NERDTreeToggle<cr>
 	let NERDTreeWinSize = 33
 	let NERDTreeShowBookmarks = 1
 	let NERDTreeIgnore = ['\.pyc', '\~$', '\.swo$', '\.swp$', '\.git', '\.hg', '\.svn', '\.bzr']
@@ -438,8 +478,19 @@ call plug#end()
     " vim
     let g:indentLine_color_term = 239
     " gvim
-    let g:indentLine_color_gui = '#A4E57E'
+    let g:indentLine_color_gui = '#525252'
 
     let g:indentLine_char = '¦'
 " }
 
+
+" vim json {
+    let g:vim_json_syntax_conceal = 0
+" }
+
+" tabular {
+    nmap <leader>t= :Tab /=<cr>
+    vmap <leader>t= :Tab /=<cr>
+    nmap <leader>t :Tab /
+    vmap <leader>t :Tab /
+" }

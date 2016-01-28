@@ -1,5 +1,9 @@
 # vimrc
 
+
+
+## for neo-vim
+
 ```
 cd ~/workspace
 git clone git@github.com:moskito518/vimrc.git
@@ -15,5 +19,18 @@ mkdir .backup
 mkdir .swp
 nvim
 :PlugInstall
+cd ~/.config/nvim/plugged
+cd YouCompleteMe && ./install.py --clang-completer --tern-completer
+cd ../tern_for_vim && npm install
+ln -s ~/workspace/vimrc/.tern-config ~/.tern-config
+
+```
+
+## for Vim/Gvim/MacVim
+
+```
+cd ~/
+ln -s ~/.config/nvim ~/.vim
+ln -s ~/.config/nvim/init.vim ~/.vimrc
 
 ```
