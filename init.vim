@@ -97,6 +97,14 @@ call plug#end()
 	set fileencodings=ucs-bom,utf-8,big5,euc-jp,gbk,euc-kr,utf-bom,iso8859-1,euc-jp,utf-16le,latin1
 	set fenc=utf-8 enc=utf-8 tenc=utf-8
 	scriptencoding utf-8
+	set nocompatible                      " not compatible with the old-fashion vi mode
+    set backspace=2                       " allow backspacing over everything in insert nc >kkmode
+    set history=1000                      " keep 1000 lines of command line history
+    set autoread                          " auto read when file is changed from outside
+    set linebreak
+    set nolist
+    set cursorline
+
 " }
 
 " Vim UI {
@@ -115,10 +123,6 @@ call plug#end()
 
 	" Highligh the column 80
 	set colorcolumn=128
-
-	" Highlight current line and column
-	"set cursorline
-	"set cursorcolumn
 
 	highlight clear SignColumn      " SignColumn should match background
 	highlight clear LineNr          " Current line number row will have same background color in relative mode
@@ -163,6 +167,8 @@ call plug#end()
 	set scrolloff=3                 " Minimum lines to keep above and below cursor
 	set foldenable                  " Auto fold code
 	set foldmethod=indent
+    set hlsearch                          " search highlighting
+    set incsearch                         " incremental search
 	"set list
 	"set listchars=tab:›\ ,trail:•,extends:+,nbsp:. " Highlight problematic whitespace
 
@@ -281,12 +287,13 @@ call plug#end()
 
 " GVim setting {
     set guioptions=ce
-    set linespace=2
 
     if has("gui_macvim")
         set guifont=Droid\ Sans\ Mono\ for\ Powerline:h12
+        set linespace=2
     elseif has("gui_gtk")
         set guifont=Droid\ Sans\ Mono\ for\ Powerline 12
+        set linespace=2
     else
         set guifont=Droid\ Sans\ Mono\ for\ Powerline:h12
     end
